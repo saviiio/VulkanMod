@@ -25,7 +25,7 @@ public class Config {
 
     public int ambientOcclusion = 1;
     public int frameQueueSize = 2;
-    public int builderThreads = 0;
+    public int builderThreads = 4;
 
     public boolean backFaceCulling = true;
     public boolean textureAnimations = true;
