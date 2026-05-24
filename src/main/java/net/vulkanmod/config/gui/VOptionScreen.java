@@ -8,6 +8,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.options.VideoSettingsScreen;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.CommonComponents;
@@ -24,6 +25,7 @@ import net.vulkanmod.vulkan.VRenderSystem;
 import net.vulkanmod.vulkan.util.ColorUtil;
 import org.lwjgl.glfw.GLFW;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -289,6 +291,7 @@ public class VOptionScreen extends Screen {
         int kofiWidth = Minecraft.getInstance().font.width(Component.translatable("vulkanmod.options.buttons.kofi")) + padding;
 
         int kofiX = this.width - kofiWidth - rightMargin;
+        this.addShaderLoaderButton(kofiX, padding);
         VButtonWidget supportButton = new VButtonWidget(kofiX, 4, kofiWidth, VGuiConstants.WIDGET_HEIGHT,
                 Component.translatable("vulkanmod.options.buttons.kofi"),
                 button -> Util.getPlatform().openUri("https://ko-fi.com/xcollateral"));
@@ -315,6 +318,33 @@ public class VOptionScreen extends Screen {
             );
             this.buttons.add(updateButton);
             this.addWidget(updateButton);
+        }
+    }
+
+
+    private void addShaderLoaderButton(int anchorX, int padding) {
+        if (!FabricLoader.getInstance().isModLoaded("iris")) {
+            return;
+        }
+
+        Component text = Component.translatable("vulkanmod.options.buttons.shader_loader");
+        int width = Minecraft.getInstance().font.width(text) + 2 * padding;
+        int x = anchorX - width - VGuiConstants.WIDGET_MARGIN;
+
+        VButtonWidget shaderButton = new VButtonWidget(x, 4, width, VGuiConstants.WIDGET_HEIGHT, text, button -> openIrisShaderScreen());
+        this.buttons.add(shaderButton);
+        this.addWidget(shaderButton);
+    }
+
+    private void openIrisShaderScreen() {
+        try {
+            Class<?> clazz = Class.forName("net.irisshaders.iris.gui.screen.ShaderPackScreen");
+            Constructor<?> ctor = clazz.getConstructor(Screen.class);
+            Screen shaderScreen = (Screen) ctor.newInstance(this);
+            assert minecraft != null;
+            minecraft.setScreen(shaderScreen);
+        } catch (ReflectiveOperationException e) {
+            Initializer.LOGGER.warn("Failed to open Iris shader loader screen.", e);
         }
     }
 
