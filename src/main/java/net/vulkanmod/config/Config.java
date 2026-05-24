@@ -24,13 +24,8 @@ public class Config {
     public boolean useWayland = false;
 
     public int ambientOcclusion = 1;
- codex/force-vulkan-to-use-4-threads-for-rendering-c9ka9j
-    public int frameQueueSize = 4;
-    public int builderThreads = 0;
-
     public int frameQueueSize = 2;
     public int builderThreads = 4;
- dev
 
     public boolean backFaceCulling = true;
     public boolean textureAnimations = true;
