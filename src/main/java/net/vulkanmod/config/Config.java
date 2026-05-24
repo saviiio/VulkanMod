@@ -24,7 +24,7 @@ public class Config {
     public boolean useWayland = false;
 
     public int ambientOcclusion = 1;
-    public int frameQueueSize = 2;
+    public int frameQueueSize = 4;
     public int builderThreads = 0;
 
     public boolean backFaceCulling = true;
