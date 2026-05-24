@@ -17,6 +17,7 @@ public abstract class GlUtil {
         return switch (ext) {
             case ".vsh" -> SPIRVUtils.ShaderKind.VERTEX_SHADER;
             case ".fsh" -> SPIRVUtils.ShaderKind.FRAGMENT_SHADER;
+            case ".csh", ".comp" -> SPIRVUtils.ShaderKind.COMPUTE_SHADER;
             default -> throw new RuntimeException("unknown shader type: " + ext);
         };
     }

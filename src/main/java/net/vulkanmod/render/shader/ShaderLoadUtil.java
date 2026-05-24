@@ -185,7 +185,7 @@ public abstract class ShaderLoadUtil {
         String shaderExtension = switch (type) {
             case VERTEX_SHADER -> ".vsh";
             case FRAGMENT_SHADER -> ".fsh";
-            case COMPUTE_SHADER -> ".comp";
+            case COMPUTE_SHADER -> ".csh";
             default -> throw new UnsupportedOperationException("shader type %s unsupported");
         };
 
@@ -204,15 +204,33 @@ public abstract class ShaderLoadUtil {
                 stream = getInputStream(shaderFile);
             }
 
+            if (stream == null && type == SPIRVUtils.ShaderKind.COMPUTE_SHADER) {
+                shaderPath = "/%s".formatted(shaderName);
+                shaderFile = "%s%s.comp".formatted(basePath, shaderPath);
+                stream = getInputStream(shaderFile);
+            }
+
             if (stream == null) {
                 shaderPath = "/%s/%s".formatted(configName, shaderName);
                 shaderFile = "%s%s%s".formatted(basePath, shaderPath, shaderExtension);
                 stream = getInputStream(shaderFile);
             }
 
+            if (stream == null && type == SPIRVUtils.ShaderKind.COMPUTE_SHADER) {
+                shaderPath = "/%s/%s".formatted(configName, shaderName);
+                shaderFile = "%s%s.comp".formatted(basePath, shaderPath);
+                stream = getInputStream(shaderFile);
+            }
+
             if (stream == null) {
                 shaderPath = "/%s/%s".formatted(shaderName, shaderName);
                 shaderFile = "%s%s%s".formatted(basePath, shaderPath, shaderExtension);
+                stream = getInputStream(shaderFile);
+            }
+
+            if (stream == null && type == SPIRVUtils.ShaderKind.COMPUTE_SHADER) {
+                shaderPath = "/%s/%s".formatted(shaderName, shaderName);
+                shaderFile = "%s%s.comp".formatted(basePath, shaderPath);
                 stream = getInputStream(shaderFile);
             }
 
