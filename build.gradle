@@ -94,6 +94,11 @@ jar {
 	}
 }
 
+
+tasks.named("jar") {
+	enabled = false
+}
+
 // configure the maven publication
 publishing {
 	publications {
